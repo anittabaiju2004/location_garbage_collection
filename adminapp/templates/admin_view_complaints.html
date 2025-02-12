@@ -1,0 +1,61 @@
+{% extends 'admin_index.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Complaint List</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Place</th>
+                <th>Ward</th>
+                <th>Location</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Bin Requested</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for complaint in complaints %}
+            <tr>
+                <td>{{ complaint.id }}</td>
+                <td>{{ complaint.user.name }}</td>
+                <td>{{ complaint.name }}</td>
+                <td>{{ complaint.phone }}</td>
+                <td>{{ complaint.place }}</td>
+                <td>{{ complaint.ward }}</td>
+                <td>{{ complaint.location }}</td>
+                <td>{{ complaint.description }}</td>
+                <td>
+                    {% if complaint.image %}
+                        <img src="{{ complaint.image.url }}" alt="Complaint Image" width="100">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>{{ complaint.bin|yesno:"Yes,No" }}</td>
+                <td>{{ complaint.get_status_display }}</td>
+                <td>{{ complaint.date }}</td>
+                <td>
+                    {% if complaint.driver %}
+                        <button class="btn btn-secondary" disabled>Allocated</button>
+                    {% else %}
+                        <form action="{% url 'allocate_complaint' complaint.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Allocate</button>
+                        </form>
+                    {% endif %}
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

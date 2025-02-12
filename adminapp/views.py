@@ -36,7 +36,6 @@ def admin_login(request):
 
 
 
-
 from django.shortcuts import render
 from driverapp.models import DriverRegister
 
@@ -65,3 +64,38 @@ def view_rejected_drivers(request):
     rejected_drivers = DriverRegister.objects.filter(status='rejected')  
     return render(request, 'view_rejected_drivers.html', {'drivers': rejected_drivers})
 
+
+
+from django.shortcuts import render
+from userapp.models import ComplaintRegister
+
+def view_complaints(request):
+    complaints = ComplaintRegister.objects.all().order_by('-date')  # Fetch complaints sorted by latest first
+    return render(request, 'admin_view_complaints.html', {'complaints': complaints})
+
+from driverapp.models import DriverRegister  # ✅ Correct
+def assign_driver(request, complaint_id, driver_id):
+    complaint = get_object_or_404(ComplaintRegister, id=complaint_id)
+    driver = get_object_or_404(DriverRegister, id=driver_id)
+
+    complaint.driver = driver  # Assign driver
+    complaint.status = 'allocated'  # Update status
+    complaint.save()
+
+    return redirect('view_complaints')  # Redirect back to complaints page
+from django.shortcuts import render, get_object_or_404, redirect
+from userapp.models import ComplaintRegister
+from driverapp.models import  DriverRegister
+
+
+def allocate_complaint(request, complaint_id):
+    complaint = get_object_or_404(ComplaintRegister, id=complaint_id)
+
+    # Try to get drivers in the same place as the complaint's place
+    drivers = DriverRegister.objects.filter(place=complaint.place, status='approved')
+
+    # If no drivers are found, get all approved drivers
+    if not drivers.exists():
+        drivers = DriverRegister.objects.filter(status='approved')
+
+    return render(request, 'allocate_complaint.html', {'complaint': complaint, 'drivers': drivers})

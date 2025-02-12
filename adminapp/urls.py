@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+
 from .views import *
 urlpatterns = [
     path('admin_index/', views.admin_index, name='admin_index'), 
@@ -10,5 +11,9 @@ urlpatterns = [
     path('admin/reject-driver/<int:driver_id>/', reject_driver, name='reject_driver'),
      path('admin/view-approved-drivers/', view_approved_drivers, name='view_approved_drivers'),
     path('admin/view-rejected-drivers/', view_rejected_drivers, name='view_rejected_drivers'),
+    path('admin/view-complaints/', view_complaints, name='view_complaints'),
+     path('admin/allocate-complaint/<int:complaint_id>/', allocate_complaint, name='allocate_complaint'),
+    path('admin/assign-driver/<int:complaint_id>/<int:driver_id>/', assign_driver, name='assign_driver'),
+
 
 ]

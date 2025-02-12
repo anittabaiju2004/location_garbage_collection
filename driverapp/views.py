@@ -36,3 +36,38 @@ class DriverLoginView(APIView):
 
         except DriverRegister.DoesNotExist:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from userapp.models import ComplaintRegister
+from driverapp.models import DriverRegister
+from .serializers import ComplaintSerializer
+
+class DriverComplaintListView(APIView):
+    def get(self, request, driver_id):
+        try:
+            driver = DriverRegister.objects.get(id=driver_id)
+            complaints = ComplaintRegister.objects.filter(driver=driver)
+            serializer = ComplaintSerializer(complaints, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except DriverRegister.DoesNotExist:
+            return Response({"error": "Driver not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class UpdateComplaintStatusView(APIView):
+    def put(self, request, complaint_id):
+        try:
+            complaint = ComplaintRegister.objects.get(id=complaint_id)
+            if complaint.driver.id != int(request.data.get("driver_id")):
+                return Response({"error": "This complaint is not assigned to you"}, status=status.HTTP_400_BAD_REQUEST)
+
+            status_choice = request.data.get("status")
+            if status_choice not in ['resolved', 'rejected']:
+                return Response({"error": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
+
+            complaint.status = status_choice
+            complaint.save()
+            return Response({"message": "Status updated successfully"}, status=status.HTTP_200_OK)
+
+        except ComplaintRegister.DoesNotExist:
+            return Response({"error": "Complaint not found"}, status=status.HTTP_404_NOT_FOUND)
+ 
