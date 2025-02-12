@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 
 from django.shortcuts import render, redirect
 
@@ -33,3 +33,35 @@ def admin_login(request):
             messages.error(request, "Invalid email or password. Please try again.")
     
     return render(request, "admin_login.html")  # Render login page
+
+
+
+
+from django.shortcuts import render
+from driverapp.models import DriverRegister
+
+
+def admin_view_driver(request):
+    pending_drivers = DriverRegister.objects.filter(status='pending')  
+    return render(request, 'admin_view_driver.html', {'drivers': pending_drivers})
+
+def approve_driver(request, driver_id):
+    driver = get_object_or_404(DriverRegister, id=driver_id)
+    driver.status = 'approved'
+    driver.save()
+    return redirect('admin_view_driver')
+
+def reject_driver(request, driver_id):
+    driver = get_object_or_404(DriverRegister, id=driver_id)
+    driver.status = 'rejected'
+    driver.save()
+    return redirect('admin_view_driver')
+
+def view_approved_drivers(request):
+    approved_drivers = DriverRegister.objects.filter(status='approved')  
+    return render(request, 'view_approved_drivers.html', {'drivers': approved_drivers})
+
+def view_rejected_drivers(request):
+    rejected_drivers = DriverRegister.objects.filter(status='rejected')  
+    return render(request, 'view_rejected_drivers.html', {'drivers': rejected_drivers})
+

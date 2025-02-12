@@ -25,7 +25,7 @@ class ComplaintRegister(models.Model):
 
     user = models.ForeignKey('tbl_register', on_delete=models.CASCADE)  # Link complaints to users
     name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15)
     ward = models.CharField(max_length=100)
     location = models.TextField()
     description = models.TextField()

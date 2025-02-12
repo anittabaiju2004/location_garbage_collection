@@ -30,6 +30,7 @@ class user_registerViewSet(ModelViewSet):
                 {
                     "message": "Registration successful",
                     "role": "user",
+                    "id":user.id,
                     "name": user.name,
                     "email": user.email,
                     "place": user.place,
@@ -84,7 +85,7 @@ class LoginView(APIView):
             # Check if the password matches
             if user.pswd == pswd:  # Direct comparison; use hashing in production
                 return Response(
-                    {"message": "Login successful", "user": user.name,"role":"user"},
+                    {"message": "Login successful", "user": user.name,"id":user.id,"role":"user"},
                     status=status.HTTP_200_OK,
                 )
             else:
@@ -120,6 +121,7 @@ from .serializers import ComplaintRegisterSerializer
 class ComplaintRegisterViewSet(viewsets.ModelViewSet):
     queryset = ComplaintRegister.objects.all().order_by('-date')
     serializer_class = ComplaintRegisterSerializer
+    
 
     def perform_create(self, serializer):
         serializer.save()

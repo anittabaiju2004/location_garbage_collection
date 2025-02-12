@@ -208,10 +208,11 @@
                 <li><a href="{% url 'admin_index' %}" class="active">Home</a></li>
     
                 <li class="dropdown">
-                    <a href="#">Category <span class="arrow">&#9660;</span></a>
+                    <a href="#">Drivers <span class="arrow">&#9660;</span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="">Add</a></li>
-                        <li><a href="">List</a></li>
+                        <li><a href="{% url 'admin_view_driver' %}">Pending Drivers</a></li>
+                        <li><a href="{% url 'view_approved_drivers' %}">Approved Drivers</a></li>
+                        <li><a href="{% url 'view_rejected_drivers' %}">Rejected Drivers</a></li>
                     </ul>
                 </li>
     

@@ -1,0 +1,8 @@
+from rest_framework import serializers
+from driverapp.models import DriverRegister
+
+class DriverRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriverRegister
+        fields = '__all__'
+        read_only_fields = ['status']  # Users cannot set status manually
