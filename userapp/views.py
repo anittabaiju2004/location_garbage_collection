@@ -85,7 +85,7 @@ class LoginView(APIView):
             # Check if the password matches
             if user.pswd == pswd:  # Direct comparison; use hashing in production
                 return Response(
-                    {"message": "Login successful", "user": user.name,"id":user.id,"role":"user"},
+                    {"message": "Login successful", "user": user.name,"id":user.id,"phone":user.phone,"role":"user"},
                     status=status.HTTP_200_OK,
                 )
             else:
