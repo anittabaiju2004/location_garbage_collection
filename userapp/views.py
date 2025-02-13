@@ -121,7 +121,6 @@ from .serializers import ComplaintRegisterSerializer
 class ComplaintRegisterViewSet(viewsets.ModelViewSet):
     queryset = ComplaintRegister.objects.all().order_by('-date')
     serializer_class = ComplaintRegisterSerializer
-    
 
     def perform_create(self, serializer):
         serializer.save()
