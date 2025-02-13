@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/view-complaints/', view_complaints, name='view_complaints'),
      path('admin/allocate-complaint/<int:complaint_id>/', allocate_complaint, name='allocate_complaint'),
     path('admin/assign-driver/<int:complaint_id>/<int:driver_id>/', assign_driver, name='assign_driver'),
+     path('update-bin-status/<int:complaint_id>/<str:status>/', update_bin_status, name='update_bin_status'),
 
 
 ]

@@ -28,4 +28,5 @@ urlpatterns = [
     path('login/', DriverLoginView.as_view(), name='driver_login'),
     path('driver-complaints/<int:driver_id>/', DriverComplaintListView.as_view(), name='driver-complaints'),
      path('complaint-status/<int:complaint_id>/', UpdateComplaintStatusView.as_view(), name='update-complaint-status'),
+     
 ]

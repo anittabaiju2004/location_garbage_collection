@@ -13,7 +13,6 @@ class tbl_register(models.Model):
     def __str__(self):
         return self.name
 
-
 from django.db import models
 from driverapp.models import DriverRegister
 
@@ -22,6 +21,11 @@ class ComplaintRegister(models.Model):
         ('pending', 'Pending'),
         ('resolved', 'Resolved'),
         ('rejected', 'Rejected'),
+    ]
+
+    BIN_STATUS_CHOICES = [
+        ('not_placed', 'Not Placed'),
+        ('placed', 'Placed'),
     ]
 
     user = models.ForeignKey('tbl_register', on_delete=models.CASCADE)
@@ -33,9 +37,11 @@ class ComplaintRegister(models.Model):
     image = models.ImageField(upload_to='complaints/', blank=True, null=True)
     bin = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    bin_status = models.CharField(max_length=20, choices=BIN_STATUS_CHOICES, default='not_placed')
     place = models.CharField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
     driver = models.ForeignKey('driverapp.DriverRegister', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"Complaint by {self.name} - {self.status}"
+

@@ -99,3 +99,14 @@ def allocate_complaint(request, complaint_id):
         drivers = DriverRegister.objects.filter(status='approved')
 
     return render(request, 'allocate_complaint.html', {'complaint': complaint, 'drivers': drivers})
+from django.db import models
+from driverapp.models import DriverRegister
+from django.shortcuts import get_object_or_404, redirect, render
+
+def update_bin_status(request, complaint_id, status):
+    complaint = get_object_or_404(ComplaintRegister, id=complaint_id)
+    if status in dict(ComplaintRegister.BIN_STATUS_CHOICES):
+        complaint.bin_status = status
+        complaint.save()
+    complaints = ComplaintRegister.objects.all().order_by('-date')
+    return render(request, 'admin_view_complaints.html', {'complaints': complaints})

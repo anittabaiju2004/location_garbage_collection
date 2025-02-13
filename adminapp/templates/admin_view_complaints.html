@@ -19,6 +19,7 @@
                 <th>Status</th>
                 <th>Date</th>
                 <th>Action</th>
+                <th>Bin Status</th> <!-- Add column header -->
             </tr>
         </thead>
         <tbody>
@@ -34,9 +35,9 @@
                 <td>{{ complaint.description }}</td>
                 <td>
                     {% if complaint.image %}
-                        <img src="{{ complaint.image.url }}" alt="Complaint Image" width="100">
+                    <img src="{{ complaint.image.url }}" alt="Complaint Image" width="100">
                     {% else %}
-                        No Image
+                    No Image
                     {% endif %}
                 </td>
                 <td>{{ complaint.bin|yesno:"Yes,No" }}</td>
@@ -44,15 +45,29 @@
                 <td>{{ complaint.date }}</td>
                 <td>
                     {% if complaint.driver %}
-                        <button class="btn btn-secondary" disabled>Allocated</button>
+                    <button class="btn btn-secondary" disabled>Allocated</button>
                     {% else %}
-                        <form action="{% url 'allocate_complaint' complaint.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Allocate</button>
-                        </form>
+                    <form action="{% url 'allocate_complaint' complaint.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Allocate</button>
+                    </form>
                     {% endif %}
                 </td>
-                
+
+                <td>
+                    <form action="{% url 'update_bin_status' complaint.id 'placed' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success" {% if complaint.bin_status|lower == "placed" %}disabled{% endif %}>
+                            Mark as Placed
+                        </button>
+                    </form>
+                    <form action="{% url 'update_bin_status' complaint.id 'not_placed' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" {% if complaint.bin_status|lower == "not_placed" %}disabled{% endif %}>
+                            Mark as Not Placed
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

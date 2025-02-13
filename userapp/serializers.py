@@ -13,6 +13,7 @@ from .models import ComplaintRegister
 from rest_framework import serializers
 from .models import ComplaintRegister
 
+
 class ComplaintRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComplaintRegister
