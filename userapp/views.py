@@ -124,5 +124,3 @@ class ComplaintRegisterViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
-
-
