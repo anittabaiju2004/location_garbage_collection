@@ -44,4 +44,3 @@ class ComplaintRegister(models.Model):
 
     def __str__(self):
         return f"Complaint by {self.name} - {self.status}"
-

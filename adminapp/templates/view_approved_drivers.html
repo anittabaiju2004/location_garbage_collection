@@ -9,6 +9,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Place</th>
                 <th>Aadhar Card</th>
                 <th>Status</th>
             </tr>
@@ -19,6 +20,7 @@
                 <td>{{ driver.name }}</td>
                 <td>{{ driver.email }}</td>
                 <td>{{ driver.phone }}</td>
+                <td>{{ driver.place }}</td>
                 <td>
                     {% if driver.aadhar_card %}
                         <a href="{{ driver.aadhar_card.url }}" target="_blank">View Aadhar</a>
