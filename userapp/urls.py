@@ -28,6 +28,9 @@ schema_view = get_schema_view(
 # Router Configuration
 router = DefaultRouter()
 router.register(r"user_register", user_registerViewSet, basename="user_register"),
+router.register(r'waste_submission', WasteSubmissionViewSet, basename='waste_submission'),
+router.register(r'profile/update', UserProfileUpdateViewSet, basename='update_user_profile')  # Update profile (ViewSet)
+router.register(r'feedback', FeedbackViewSet, basename='feedback')
 router.register(r'complaints', ComplaintRegisterViewSet, basename='complaints')
 
 
@@ -53,6 +56,44 @@ urlpatterns = [
     # API Router
     path('', include(router.urls)),
     path('user_login/', LoginView.as_view(), name='user_login'),
+    path('user_login/', LoginView.as_view(), name='user_login'),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('user_wards/', WardListView.as_view(), name='user_wards'),
+    path('delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('profile/<int:id>/', UserProfileView.as_view(), name='user_profile'),  
+    path('make_payment/', MakePaymentView.as_view(), name='make_payment'),
+    path('user/bookings/<int:user_id>/', UserBookingsView.as_view(), name='user-bookings'),
+    path('reschedule/<int:submission_id>/', RescheduleWasteSubmissionView.as_view(), name='reschedule_waste'),
+    path('update-payment/<int:waste_submission_id>/', UpdatePaymentView.as_view(), name='update-payment'),
+     path('user/<int:user_id>/payments/', UserPaymentHistoryView.as_view(), name='user-payment-history'),
+     
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
     path('my_complaints/<int:user_id>/', MyComplaintsView.as_view(), name='my_complaints'),
    
 ]

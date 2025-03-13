@@ -32,7 +32,7 @@ class DriverLoginView(APIView):
             if driver.status != 'approved':
                 return Response({'error': 'Your account is not approved'}, status=status.HTTP_403_FORBIDDEN)
 
-            return Response({'message': 'Login successful', 'driver_id': driver.id, 'name': driver.name,'role':'driver'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Login successful', 'driver_id': driver.id, 'name': driver.name,'role':'driver',"password":driver.password}, status=status.HTTP_200_OK)
 
         except DriverRegister.DoesNotExist:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
@@ -53,21 +53,36 @@ class DriverComplaintListView(APIView):
         except DriverRegister.DoesNotExist:
             return Response({"error": "Driver not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from userapp.models import ComplaintRegister
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+from userapp.models import ComplaintRegister
+
 class UpdateComplaintStatusView(APIView):
-    def put(self, request, complaint_id):
+    def put(self, request, *args, **kwargs):
+        complaint_id = kwargs.get("complaint_id")  # Ensure it matches the URL parameter
+        complaint = get_object_or_404(ComplaintRegister, id=complaint_id)
+
+        driver_id = request.data.get("id")
+
+        if driver_id is None:
+            return Response({"error": "Driver ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            complaint = ComplaintRegister.objects.get(id=complaint_id)
-            if complaint.driver.id != int(request.data.get("driver_id")):
-                return Response({"error": "This complaint is not assigned to you"}, status=status.HTTP_400_BAD_REQUEST)
+            driver_id = int(driver_id)
+        except ValueError:
+            return Response({"error": "Invalid Driver ID"}, status=status.HTTP_400_BAD_REQUEST)
 
-            status_choice = request.data.get("status")
-            if status_choice not in ['resolved', 'rejected']:
-                return Response({"error": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
+        if not complaint.driver or complaint.driver.id != driver_id:
+            return Response({"error": "Unauthorized access"}, status=status.HTTP_403_FORBIDDEN)
 
-            complaint.status = status_choice
-            complaint.save()
-            return Response({"message": "Status updated successfully"}, status=status.HTTP_200_OK)
+        complaint.status = request.data.get("status", complaint.status)
+        complaint.save()
 
-        except ComplaintRegister.DoesNotExist:
-            return Response({"error": "Complaint not found"}, status=status.HTTP_404_NOT_FOUND)
- 
+        return Response({"message": "Complaint status updated successfully"}, status=status.HTTP_200_OK)

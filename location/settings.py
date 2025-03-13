@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'adminapp',
     'driverapp',
     'userapp',
+    'employeeapp',
+    'recyclerapp',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +84,7 @@ WSGI_APPLICATION = 'location.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'db_garbage',         
+        'NAME': 'location',         
         'USER': 'root',         
         'PASSWORD': '', 
         'HOST': 'localhost',                  

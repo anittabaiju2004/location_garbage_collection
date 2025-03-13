@@ -25,7 +25,10 @@ urlpatterns = [
     path('adminapp/', include('adminapp.urls')),
     path('driverapp/', include('driverapp.urls')),
     path('userapp/', include('userapp.urls')),
+    path('employeeapp/', include('employeeapp.urls')),
+    path('recyclerapp/', include('recyclerapp.urls')),
 ]
+
 
 # Only in DEBUG mode
 if settings.DEBUG:

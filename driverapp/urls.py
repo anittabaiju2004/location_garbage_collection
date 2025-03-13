@@ -9,7 +9,7 @@ from driverapp.views import *
 # Create API documentation schema
 schema_view = get_schema_view(
     openapi.Info(
-        title="Driver Registration API",
+        title="Location Based Garbage Collecting App",
         default_version='v1',
         description="API for driver registration and management",
     ),
